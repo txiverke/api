@@ -1,0 +1,29 @@
+{
+  "extends": [
+    "airbnb",
+    "plugin:flowtype/recommended"
+  ],
+  "plugins": [
+    "flowtype",
+    "compat"
+  ],
+  "rules": {
+    "semi": [2, "never"],
+    "no-unexpected-multiline": 2,
+    "compat/compat": 2,
+    "no-underscore-dangle": ["error", { "allow": ["_id", "_this"] }],
+    "consistent-return": ["error", { "treatUndefinedAsUnspecified": true }],
+    "func-names": ["error", "never"],
+    "arrow-parens": ["error", "as-needed"],
+    "react/forbid-prop-types": ["off", { "forbid": [] }],
+    "react/require-default-props": ["off", {}],
+    "import/no-extraneous-dependencies": ["off", {}]
+  },
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "settings": {
+    "polyfills": ["fetch"]
+  }
+}
