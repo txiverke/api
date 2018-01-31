@@ -16,7 +16,6 @@ exports.list = async (req, res, next) => {
 exports.create = async (req, res, next) => {
 
   try {
-    console.log('create',req.body)
     const postObj = Object.assign({}, req.body, {
       background: req.file.filename,
       creator: JSON.parse(req.body.creator),
@@ -27,13 +26,14 @@ exports.create = async (req, res, next) => {
     const posts = await Post.find({}).populate('creator').exec()
     res.status(201).json(posts)
   } catch (err) {
+    console.log(err)
     next(Object.assign({}, err, { status: 400 }))
   }
 }
 
 exports.postById = async (req, res, next, id) => {
   try {
-    const post = await Post.findById(id).populate('creator').exec()
+    const post = await Post.findById(id)
     req.post = post
     next()
   } catch (err) {
@@ -41,14 +41,24 @@ exports.postById = async (req, res, next, id) => {
   }
 }
 
-exports.update = (req, res) => {
-  Post.findByIdAndUpdate(req.post._id, req.body, (err, post) => {
-    if (err) {
-      return res.status(400).send()
-    }
-    Post.findById(post._id).exec((error, updatedPost) => res.status(200).json(updatedPost))
-    return false
-  })
+exports.update = async (req, res, next) => {
+  try {
+    console.log(req.body)
+    const background = (req.file && req.file !== 'undefined') 
+      ? req.file.filename 
+      : req.post.background
+    const postToUpdate = Object.assign(req.post, req.body, {
+      background,
+      creator: JSON.parse(req.body.creator),
+    })
+
+    await postToUpdate.save()
+    const posts = await Post.find({})
+
+    res.status(200).json(posts)
+  } catch (err) {
+    next(Object.assign({}, err, { status: 400 }))
+  }
 }
 
 exports.read = (req, res) => res.status(200).json(req.post)
@@ -59,8 +69,6 @@ exports.remove = async (req, res) => {
   try {
     await postToRemove.remove()
     const posts = await Post.find({})
-      .populate('creator')
-      .exec()
     res.status(200).json(posts)
   } catch (err) {
     next(Object.assign({}, err, { status: 400 }))

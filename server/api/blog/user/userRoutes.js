@@ -14,11 +14,11 @@ router
   .post(checkUser, ctrl.create)
 
 router
-  .route('/:id')
+  .route('/:userId')
   .get(ctrl.read)
   .put(checkUser, ctrl.update)
   .delete(checkUser, ctrl.delete)
 
-router.param('id', ctrl.userById)
+router.param('userId', ctrl.userById)
 
 module.exports = router

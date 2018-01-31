@@ -34,7 +34,7 @@ router
   .route('/:postId')
   .get(ctrl.read)
   .delete(checkUser, ctrl.remove)
-  .put(checkUser, ctrl.update)
+  .put(checkUser, upload.single('file'), ctrl.update)
 
 router.param('postId', ctrl.postById)
 
