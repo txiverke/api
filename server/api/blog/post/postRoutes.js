@@ -4,7 +4,6 @@
 const router = require('express').Router()
 const multer = require('multer')
 const crypto = require('crypto')
-const mime = require('mime')
 
 const ctrl = require('./postController')
 const auth = require('../../../auth')

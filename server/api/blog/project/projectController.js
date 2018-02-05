@@ -20,3 +20,15 @@ exports.create = async (req, res, next) => {
     return next(newErr(err, '400'))
   }
 }
+
+exports.projectById = async (req, res, next, id) => {
+  try {
+    const project = await Project.findById(id)
+    req.project = project
+    next()
+  } catch (err) {
+    return next(newErr(err, '400'))
+  }
+}
+
+exports.read = (req, res) => res.status(200).json(req.project)

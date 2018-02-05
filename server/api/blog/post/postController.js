@@ -1,6 +1,7 @@
 const fs = require('fs')
 
 const Post = require('./postModel')
+const newErr = require('../../../util/errorStatus')
 
 exports.list = async (req, res, next) => {
   try {
@@ -63,27 +64,17 @@ exports.update = async (req, res, next) => {
 
 exports.read = (req, res) => res.status(200).json(req.post)
 
-exports.remove = async (req, res) => {
+exports.remove = async (req, res, next) => {
   const postToRemove = req.post
 
   try {
+    await removeAsset(`posts/${postToRemove.background}`, next)
     await postToRemove.remove()
     const posts = await Post.find({})
     res.status(200).json(posts)
   } catch (err) {
     next(Object.assign({}, err, { status: 400 }))
   }
-    /*
-    fs.unlink(`./public/img/posts/${post.background}`, error => {
-      if (error) throw error
-      return res.status(200).json({
-        post,
-        message: 'Post removed correctly.',
-        success: true,
-      })
-    })
-
-    return false*/
 }
 
 exports.filter = (req, res) => {
@@ -95,3 +86,10 @@ exports.filter = (req, res) => {
     return res.status(200).json(posts)
   })
 }
+
+function removeAsset(path, next) {
+  fs.unlink(`./public/blog/img/${path}`, err => {
+    if (err) return next(newErr(err, '400'))
+  }) 
+}
+
