@@ -1,6 +1,7 @@
 /**
  * POST ROUTES
  */
+
 const router = require('express').Router()
 const multer = require('multer')
 const crypto = require('crypto')
@@ -32,8 +33,8 @@ router
 router
   .route('/:postId')
   .get(ctrl.read)
-  .delete(checkUser, ctrl.remove)
   .put(checkUser, upload.single('file'), ctrl.update)
+  .delete(checkUser, ctrl.remove)
 
 router.param('postId', ctrl.postById)
 

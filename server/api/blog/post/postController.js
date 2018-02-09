@@ -24,10 +24,9 @@ exports.create = async (req, res, next) => {
   
     const newPost = new Post(postObj)
     await newPost.save()
-    const posts = await Post.find({}).populate('creator').exec()
+    const posts = await Post.find({})
     res.status(201).json(posts)
   } catch (err) {
-    console.log(err)
     next(Object.assign({}, err, { status: 400 }))
   }
 }
@@ -44,18 +43,13 @@ exports.postById = async (req, res, next, id) => {
 
 exports.update = async (req, res, next) => {
   try {
-    console.log(req.body)
     const background = (req.file && req.file !== 'undefined') 
       ? req.file.filename 
       : req.post.background
-    const postToUpdate = Object.assign(req.post, req.body, {
-      background,
-      creator: JSON.parse(req.body.creator),
-    })
-
+    const postToUpdate = Object.assign(req.post, req.body, { background })
     await postToUpdate.save()
-    const posts = await Post.find({})
 
+    const posts = await Post.find({})
     res.status(200).json(posts)
   } catch (err) {
     next(Object.assign({}, err, { status: 400 }))
@@ -65,9 +59,8 @@ exports.update = async (req, res, next) => {
 exports.read = (req, res) => res.status(200).json(req.post)
 
 exports.remove = async (req, res, next) => {
-  const postToRemove = req.post
-
   try {
+    const postToRemove = req.post
     await removeAsset(`posts/${postToRemove.background}`, next)
     await postToRemove.remove()
     const posts = await Post.find({})
@@ -75,16 +68,6 @@ exports.remove = async (req, res, next) => {
   } catch (err) {
     next(Object.assign({}, err, { status: 400 }))
   }
-}
-
-exports.filter = (req, res) => {
-  const tag = req.params.tag
-  Post.find({ tags: tag }, (err, posts) => {
-    if (err) {
-      return res.status(400).send()
-    }
-    return res.status(200).json(posts)
-  })
 }
 
 function removeAsset(path, next) {

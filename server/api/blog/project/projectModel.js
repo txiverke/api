@@ -12,10 +12,11 @@ const ProjectSchema = new Schema({
     required: true
   },
   subtitle: String,
-  content: {
+  summary: {
     type: String,
     required: true
   },
+  content: String,
   link: String,
   background: String,
   tags: Array,
