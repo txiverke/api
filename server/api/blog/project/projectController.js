@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 const Project = require('./projectModel')
 const newErr = require('../../../util/errorStatus')
 
@@ -12,11 +14,7 @@ exports.list = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
-    const projectObj = Object.assign({}, req.body, {
-      background: req.file.filename,
-      creator: JSON.parse(req.body.creator),
-    })
-
+    const projectObj = Object.assign(req.body, { background: req.file.filename })
     const newProject = new Project(projectObj)
     await newProject.save()
     const projects = await Project.find({})
@@ -56,11 +54,16 @@ exports.update = async (req, res, next) => {
 
 exports.remove = async (req, res, next) => {
   try {
+
     const projectToRemove = req.project
-    await removeAsset(`projects/${projectToRemove.background}`, next)
+    if (projectToRemove.background) {
+      await removeAsset(`projects/${projectToRemove.background}`, next)
+    }
+    await projectToRemove.remove()
     const projects = await Project.find({})
     res.status(200).json(projects)
   } catch (err) {
+    console.log(err)
     next(newErr(err, '400'))
   }
 }

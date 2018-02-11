@@ -17,11 +17,7 @@ exports.list = async (req, res, next) => {
 exports.create = async (req, res, next) => {
 
   try {
-    const postObj = Object.assign({}, req.body, {
-      background: req.file.filename,
-      creator: JSON.parse(req.body.creator),
-    })
-  
+    const postObj = Object.assign({}, req.body, { background: req.file.filename })
     const newPost = new Post(postObj)
     await newPost.save()
     const posts = await Post.find({})
@@ -41,22 +37,19 @@ exports.postById = async (req, res, next, id) => {
   }
 }
 
+exports.read = (req, res) => res.status(200).json(req.post)
+
 exports.update = async (req, res, next) => {
   try {
-    const background = (req.file && req.file !== 'undefined') 
-      ? req.file.filename 
-      : req.post.background
+    const background = (req.file && req.file !== 'undefined') ? req.file.filename : req.post.background
     const postToUpdate = Object.assign(req.post, req.body, { background })
     await postToUpdate.save()
-
     const posts = await Post.find({})
     res.status(200).json(posts)
   } catch (err) {
     next(Object.assign({}, err, { status: 400 }))
   }
 }
-
-exports.read = (req, res) => res.status(200).json(req.post)
 
 exports.remove = async (req, res, next) => {
   try {
