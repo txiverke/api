@@ -40,14 +40,15 @@ exports.update = async (req, res, next) => {
   try {
     const background = (req.file && req.file !== 'undefined')
       ? req.file.filename
-      : req.post.background
+      : req.project.background
 
-    const projectToUpdate = Object.assing(req.project, req.body, {  background })
+    const projectToUpdate = Object.assign(req.project, req.body, {  background })
     await projectToUpdate.save()
 
     const projects = await Project.find({})
     return res.status(200).json(projects)
   } catch (err) {
+    console.log(err)
     return next(newErr(err, '400'))
   }
 }

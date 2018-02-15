@@ -2,7 +2,7 @@ require('colors')
 
 const config = require('../config')
 
-const noop = () => avoid
+const noop = () => {}
 const consoleLog = config.logging ? console.log.bind(console) : noop()
 
 var logger = {
