@@ -1,5 +1,5 @@
 const User = require('./userModel')
-const signToken = require('../../../auth').signToken;
+const signToken = require('../../../auth').signToken
 const newErr = require('../../../util/errorStatus')
 
 exports.list = async (req, res, next) => {
@@ -12,7 +12,7 @@ exports.list = async (req, res, next) => {
 }
 
 exports.create = async (req, res, next) => {
-  const newUser = new User(req.body);
+  const newUser = new User(req.body)
 
   try {
     const user = await newUser.save()
@@ -46,12 +46,12 @@ exports.update = async (req, res, next) => {
 exports.delete = (req, res, next) => {
   req.user.remove((err, removed) => {
     if (err) {
-      next(err);
+      next(err)
     } else {
-      res.json(removed);
+      res.json(removed)
     }
-  });
-};
+  })
+}
 
 exports.read = (req, res) => {
   const user = {

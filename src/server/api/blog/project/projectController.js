@@ -3,6 +3,15 @@ const fs = require('fs')
 const Project = require('./projectModel')
 const newErr = require('../../../util/errorStatus')
 
+function removeAsset(path, next) {
+// eslint-disable-next-line consistent-return
+  fs.unlink(`./public/blog/img/${path}`, err => {
+    if (err) {
+      return next(newErr(err, '400'))
+    }
+  })
+}
+
 exports.list = async (req, res, next) => {
   try {
     const projects = await Project.find({})
@@ -28,7 +37,7 @@ exports.projectById = async (req, res, next, id) => {
   try {
     const project = await Project.findById(id)
     req.project = project
-    next()
+    return next()
   } catch (err) {
     return next(newErr(err, '400'))
   }
@@ -42,20 +51,18 @@ exports.update = async (req, res, next) => {
       ? req.file.filename
       : req.project.background
 
-    const projectToUpdate = Object.assign(req.project, req.body, {  background })
+    const projectToUpdate = Object.assign(req.project, req.body, { background })
     await projectToUpdate.save()
 
     const projects = await Project.find({})
     return res.status(200).json(projects)
   } catch (err) {
-    console.log(err)
     return next(newErr(err, '400'))
   }
 }
 
 exports.remove = async (req, res, next) => {
   try {
-
     const projectToRemove = req.project
     if (projectToRemove.background) {
       await removeAsset(`projects/${projectToRemove.background}`, next)
@@ -64,13 +71,6 @@ exports.remove = async (req, res, next) => {
     const projects = await Project.find({})
     res.status(200).json(projects)
   } catch (err) {
-    console.log(err)
     next(newErr(err, '400'))
   }
-}
-
-function removeAsset(path, next) {
-  fs.unlink(`./public/blog/img/${path}`, err => {
-    if (err) return next(newErr(err, '400'))
-  }) 
 }

@@ -3,35 +3,35 @@ require('colors')
 const config = require('../config')
 
 const noop = () => {}
+// eslint-disable-next-line no-console
 const consoleLog = config.logging ? console.log.bind(console) : noop()
 
-var logger = {
+const logger = {
   log: (...argList) => {
-    const tag = '[  LOG  ]'.green;  
+    const tag = '[  LOG  ]'.green
     const args = argList
-      .map(function(arg) {
-        if(typeof arg === 'object') {
-          let string = JSON.stringify(arg, null, 2);
+      .map(arg => {
+        if (typeof arg === 'object') {
+          const string = JSON.stringify(arg, null, 2)
           return `${tag} ${string.cyan}`
-        } else {
-          return `${tag} ${arg.cyan}`
         }
-      });
+        return `${tag} ${arg.cyan}`
+      })
 
-    consoleLog.apply(console, args);
+    consoleLog.apply(console, args)
   },
 
-  error: function(...argList) {
+  error: (...argList) => {
     const args = argList
-      .map(function(arg) {
-        arg = arg.stack || arg;
-        var name = arg.name || '[❌ ERROR ❌]';
-        var log = name.yellow + '  ' + arg.red;
-        return log;
-      });
+      .map(arg => {
+        const item = arg.stack || arg
+        const name = item.name || '[❌ ERROR ❌]'
+        const log = `${name.yellow} ${item.red}`
+        return log
+      })
 
-    consoleLog.apply(console, args);
-  }
-};
+    consoleLog.apply(console, args)
+  },
+}
 
 module.exports = logger

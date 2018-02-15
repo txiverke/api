@@ -1,4 +1,5 @@
 const dotenv = require('dotenv')
+
 dotenv.config()
 
 const config = {
@@ -8,7 +9,7 @@ const config = {
   port: process.env.PORT || 8888,
   expireTime: 24 * 60 * 10,
   secrets: {
-    jwt: process.env.JWT || 'txiverke'
+    jwt: process.env.JWT || 'txiverke',
   },
   env: '',
 }

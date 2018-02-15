@@ -9,17 +9,17 @@ const UserSchema = new Schema({
   },
   lastname: {
     type: String,
-    required: true
+    required: true,
   },
   job: String,
   username: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   bio: String,
   created: {
@@ -28,26 +28,25 @@ const UserSchema = new Schema({
   },
 })
 
-UserSchema.pre('save', function(next) {
-  if (!this.isModified('password')) return next();
-  this.password = this.encryptPassword(this.password);
-  next();
+UserSchema.pre('save', function (next) {
+  if (!this.isModified('password')) return next()
+  this.password = this.encryptPassword(this.password)
+  return next()
 })
 
 UserSchema.methods = {
-  // check the passwords on signin
-  authenticate: function(plainTextPword) {
+  // eslint-disable-next-line object-shorthand
+  authenticate: function (plainTextPword) {
     return bcrypt.compareSync(plainTextPword, this.password)
   },
-  // hash the passwords
-  encryptPassword: function(plainTextPword) {
+  // eslint-disable-next-line object-shorthand
+  encryptPassword: function (plainTextPword) {
     if (!plainTextPword) {
       return ''
-    } else {
-      var salt = bcrypt.genSaltSync(10)
-      return bcrypt.hashSync(plainTextPword, salt)
     }
-  }
+    const salt = bcrypt.genSaltSync(10)
+    return bcrypt.hashSync(plainTextPword, salt)
+  },
 }
 
 module.exports = mongoose.model('User', UserSchema)

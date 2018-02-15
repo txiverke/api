@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
       const mimetype = file.originalname.substr(file.originalname.lastIndexOf('.') + 1)
       cb(null, `${raw.toString('hex')}${Date.now()}.${mimetype}`)
     })
-  }
+  },
 })
 
 const upload = multer({ storage })

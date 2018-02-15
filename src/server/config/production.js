@@ -1,11 +1,11 @@
 // @flow
 
-require("babel-core/register");
-require("babel-polyfill");
+require('babel-core/register')
+require('babel-polyfill')
 
 module.exports = {
   logging: true,
   db: {
-    url: process.env.MONGODB_LOCAL,
+    url: process.env.MONGODB_URI,
   },
 }

@@ -20,7 +20,7 @@ const PostSchema = new Schema({
   },
   link: {
     type: String,
-    required: true
+    required: true,
   },
   tags: String,
 })

@@ -22,5 +22,4 @@ module.exports = app => {
 
   app.use(express.static('./public'))
   app.use(favicon('./public/favicon.ico'))
-
 }
