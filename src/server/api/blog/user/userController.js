@@ -53,7 +53,7 @@ exports.delete = (req, res, next) => {
   })
 }
 
-exports.read = (req, res, next) => {
+exports.read = (req, res) => {
   const user = {
     _id: req.user._id,
     bio: req.user.bio,

@@ -1,6 +1,7 @@
 // @flow
 
 const express = require('express')
+const path = require('path')
 
 const app = express()
 const api = require('./api')
@@ -14,6 +15,10 @@ require('./middleware')(app)
 
 app.use('/api', api)
 app.use('/auth', auth)
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
 
 app.use((err, req, res) => {
   // if error thrown from jwt validation check
