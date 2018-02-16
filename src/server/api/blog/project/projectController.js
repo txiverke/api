@@ -47,9 +47,14 @@ exports.read = (req, res) => res.status(200).json(req.project)
 
 exports.update = async (req, res, next) => {
   try {
-    const background = (req.file && req.file !== 'undefined')
-      ? req.file.filename
-      : req.project.background
+    let background = ''
+
+    if (req.file && req.file !== 'undefined') {
+      await removeAsset(`projects/${req.project.background}`, next)
+      background = req.file.filename
+    } else {
+      background = req.project.background
+    }
 
     const projectToUpdate = Object.assign(req.project, req.body, { background })
     await projectToUpdate.save()

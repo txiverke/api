@@ -7,7 +7,7 @@ const config = require('../config')
 const checkToken = expressJwt({ secret: config.secrets.jwt })
 const User = require('../api/blog/user/userModel')
 
-exports.decodeToken = () => (req, res, next) => {
+exports.decodeToken = () => (req: Object, res: Object, next: Object) => {
   if (req.headers && req.headers.access_token) {
     req.headers.authorization = `Bearer ${req.headers.access_token}`
   }
@@ -55,7 +55,7 @@ exports.verifyUser = () => (req, res, next) => {
   return false
 }
 
-exports.signToken = id =>
+exports.signToken = (id: string) =>
   jwt.sign(
     { _id: id },
     config.secrets.jwt,

@@ -47,13 +47,20 @@ exports.read = (req, res) => res.status(200).json(req.post)
 
 exports.update = async (req, res, next) => {
   try {
-    const background = (req.file && req.file !== 'undefined') ? req.file.filename : req.post.background
+    let background = ''
+
+    if (req.file && req.file !== 'undefined') {
+      await removeAsset(`posts/${req.post.background}`, next)
+      background = req.file.filename
+    } else {
+      background = req.post.background
+    }
     const postToUpdate = Object.assign(req.post, req.body, { background })
     await postToUpdate.save()
     const posts = await Post.find({})
-    res.status(200).json(posts)
+    return res.status(200).json(posts)
   } catch (err) {
-    next(Object.assign({}, err, { status: 400 }))
+    return next(Object.assign({}, err, { status: 400 }))
   }
 }
 
