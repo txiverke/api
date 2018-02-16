@@ -6,7 +6,7 @@ const config = {
   dev: 'development',
   test: 'testing',
   prod: 'production',
-  port: process.env.PORT || 8888,
+  port: process.env.PORT,
   expireTime: 24 * 60 * 10,
   secrets: {
     jwt: process.env.JWT || 'txiverke',
