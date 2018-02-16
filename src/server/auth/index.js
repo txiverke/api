@@ -1,3 +1,5 @@
+// @flow
+
 const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const config = require('../config')
