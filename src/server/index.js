@@ -7,7 +7,7 @@ const app = express()
 const api = require('./api')
 const error = require('./middleware/errorHandler')
 const auth = require('./auth/routes')
-const default = require('./default')
+const root = require('./root')
 
 require('./config/mongoose')()
 
@@ -15,7 +15,7 @@ require('./middleware')(app)
 
 app.use('/api', api)
 app.use('/auth', auth)
-app.use('/', default)
+app.use('/', root)
 
 app.use(error())
 
