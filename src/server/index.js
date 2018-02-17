@@ -6,7 +6,6 @@ const path = require('path')
 const app = express()
 const api = require('./api')
 const error = require('./middleware/errorHandler')
-const logger = require('./util/logger')
 const auth = require('./auth/routes')
 
 require('./config/mongoose')()
@@ -23,7 +22,7 @@ app.use((err, req, res) => {
     return
   }
 
-  logger.error(err.stack)
+  console.log(err.stack)
   res.status(500).send('Oops')
 })
 

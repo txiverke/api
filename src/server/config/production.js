@@ -4,7 +4,7 @@ require('babel-core/register')
 require('babel-polyfill')
 
 module.exports = {
-  logging: true,
+  logging: false,
   db: {
     url: process.env.MONGODB_URI,
   },
