@@ -14,7 +14,8 @@
     "prod:build": "rimraf lib && babel src -d lib --ignore .test.js",
     "prod:start": "cross-env NODE_ENV=production pm2 start lib && pm2 logs",
     "prod:stop": "pm2 delete lib",
-    "test": "eslint src && flow && jest --coverage",
+    "eslint": "eslint src && flow",
+    "test": "jest --coverage",
     "prepush": "yarn prod:build"
   },
   "dependencies": {

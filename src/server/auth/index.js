@@ -1,13 +1,13 @@
-// @flow
-
 const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const config = require('../config')
 
+console.log(config)
+
 const checkToken = expressJwt({ secret: config.secrets.jwt })
 const User = require('../api/blog/user/userModel')
 
-exports.decodeToken = () => (req: Object, res: Object, next: Function) => {
+exports.decodeToken = () => (req, res, next) => {
   if (req.headers && req.headers.access_token) {
     req.headers.authorization = `Bearer ${req.headers.access_token}`
   }
@@ -15,7 +15,7 @@ exports.decodeToken = () => (req: Object, res: Object, next: Function) => {
   checkToken(req, res, next)
 }
 
-exports.getFreshUser = () => (req: Object, res: Object, next: Function) => {
+exports.getFreshUser = () => (req, res, next) => {
   User.findById(req.user._id)
     .then(user => {
       if (!user) {
@@ -30,7 +30,7 @@ exports.getFreshUser = () => (req: Object, res: Object, next: Function) => {
 }
 
 
-exports.verifyUser = () => (req: Object, res: Object, next: Function) => {
+exports.verifyUser = () => (req, res, next) => {
   const username = req.body.username
   const password = req.body.password
 
@@ -55,7 +55,7 @@ exports.verifyUser = () => (req: Object, res: Object, next: Function) => {
   return false
 }
 
-exports.signToken = (id: string) =>
+exports.signToken = (id) =>
   jwt.sign(
     { _id: id },
     config.secrets.jwt,

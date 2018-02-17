@@ -4,12 +4,12 @@ dotenv.config()
 
 const config = {
   dev: 'development',
-  test: 'testing',
+  test: 'test',
   prod: 'production',
   port: process.env.PORT || 5000,
   expireTime: 24 * 60 * 10,
   secrets: {
-    jwt: process.env.JWT || 'txiverke',
+    jwt: process.env.JWT,
   },
   env: '',
 }
@@ -20,8 +20,13 @@ config.env = process.env.NODE_ENV
 let envConfig
 
 try {
-  // eslint-disable-next-line
-  envConfig = require(`./${config.env}`)
+  if (config.env === 'test') {
+    // eslint-disable-next-line
+    envConfig = require('./testing')
+  } else {
+    // eslint-disable-next-line
+    envConfig = require(`./${config.env}`)
+  }
 } catch (e) {
   envConfig = {}
 }

@@ -3,6 +3,6 @@
 module.exports = {
   logging: false,
   db: {
-    url: process.env.MONGODB_DEV,
+    url: process.env.MONGODB_LOCAL,
   },
 }
