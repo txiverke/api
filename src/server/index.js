@@ -14,16 +14,6 @@ require('./middleware')(app)
 
 app.use('/api', api)
 app.use('/auth', auth)
-
-app.use((err, req, res) => {
-  // if error thrown from jwt validation check
-  if (err.name === 'UnauthorizedError') {
-    return res.status(401).send('Invalid token')
-  }
-
-  res.status(500).send('Oops')
-})
-
 app.use(error())
 
 module.exports = app
