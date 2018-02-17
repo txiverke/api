@@ -6,6 +6,7 @@ const checkToken = expressJwt({ secret: config.secrets.jwt })
 const User = require('../api/blog/user/userModel')
 
 exports.decodeToken = () => (req, res, next) => {
+  console.log(req.headers)
   if (req.headers && req.headers.access_token) {
     req.headers.authorization = `Bearer ${req.headers.access_token}`
   }
