@@ -18,11 +18,9 @@ app.use('/auth', auth)
 app.use((err, req, res) => {
   // if error thrown from jwt validation check
   if (err.name === 'UnauthorizedError') {
-    res.status(401).send('Invalid token')
-    return
+    return res.status(401).send('Invalid token')
   }
 
-  console.log(err.stack)
   res.status(500).send('Oops')
 })
 
