@@ -2,8 +2,6 @@ const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const config = require('../config')
 
-console.log(config)
-
 const checkToken = expressJwt({ secret: config.secrets.jwt })
 const User = require('../api/blog/user/userModel')
 

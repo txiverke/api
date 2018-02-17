@@ -35,10 +35,13 @@ exports.userById = async (req, res, next, id) => {
 
 exports.update = async (req, res, next) => {
   try {
+    console.log('user', req.user)
+    console.log('body', req.body)
     const updatedUser = Object.assign(req.user, req.body)
     const user = await updatedUser.save()
     res.status(201).json(user)
   } catch (err) {
+    console.log(err)
     next(newErr(err, '400'))
   }
 }
