@@ -22,10 +22,10 @@ let envConfig
 try {
   if (config.env === 'test') {
     // eslint-disable-next-line
-    envConfig = require('./testing')
+    envConfig = require('./testing.js')
   } else {
     // eslint-disable-next-line
-    envConfig = require(`./${config.env}`)
+    envConfig = require(`./${config.env}.js`)
   }
 } catch (e) {
   envConfig = {}

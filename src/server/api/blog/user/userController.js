@@ -1,17 +1,25 @@
 const User = require('./userModel')
-const signToken = require('../../../auth').signToken
-const newErr = require('../../../util/errorStatus')
+//const signToken = require('../../../auth').signToken
+//const newErr = require('../../../util/errorStatus')
 
-exports.list = async (req, res, next) => {
+function newErr (err, state) {
+  switch (err.status) {
+    case '400': return res.status(err.status).json({ error: err })
+    case '500': return res.status(err.status).json({ error: err })
+    default: return res.status(500).json({ error: err })
+  }
+}
+
+exports.list = async (req, res) => {
   try {
     const users = await User.find({})
     res.status(200).json(users)
   } catch (err) {
-    next(newErr(err, '400'))
+    return newErr(err, '400')
   }
 }
 
-exports.create = async (req, res, next) => {
+exports.create = async (req, res) => {
   const newUser = new User(req.body)
 
   try {
@@ -19,7 +27,7 @@ exports.create = async (req, res, next) => {
     const token = await signToken(user._id)
     res.status(200).json({ token })
   } catch (err) {
-    next(newErr(err, '400'))
+    return newErr(err, '400')
   }
 }
 
@@ -29,11 +37,11 @@ exports.userById = async (req, res, next, id) => {
     req.user = user
     next()
   } catch (err) {
-    next(newErr(err, '400'))
+    return newErr(err, '400')
   }
 }
 
-exports.update = async (req, res, next) => {
+exports.update = async (req, res) => {
   try {
     console.log('user', req.user)
     console.log('body', req.body)
@@ -42,7 +50,7 @@ exports.update = async (req, res, next) => {
     res.status(201).json(user)
   } catch (err) {
     console.log(err)
-    next(newErr(err, '400'))
+    return newErr(err, '400')
   }
 }
 

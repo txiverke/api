@@ -1,3 +1,5 @@
+// @flow
+
 const router = require('express').Router()
 
 const blog = require('./blog')
