@@ -12,6 +12,7 @@ const UserSchema = new Schema({
     required: true,
   },
   job: String,
+  job_cat: String,
   username: {
     type: String,
     required: true,
@@ -22,6 +23,7 @@ const UserSchema = new Schema({
     required: true,
   },
   bio: String,
+  bio_cat: String,
   created: {
     type: Date,
     default: Date.now,

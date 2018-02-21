@@ -65,8 +65,10 @@ exports.read = (req, res) => {
   const user = {
     _id: req.user._id,
     bio: req.user.bio,
+    bio_cat: req.user.bio_cat,
     firstname: req.user.firstname,
     job: req.user.job,
+    job_cat: req.user.job_cat,
     lastname: req.user.lastname,
     username: req.user.username,
   }
