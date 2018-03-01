@@ -4,15 +4,12 @@ require('colors')
 const mongoose = require('mongoose')
 
 const config = require('./index')
-const options = { 
-  socketTimeoutMS: 0,
-  keepAlive: true,
-  reconnectTries: 30 
-}
 
 module.exports = () => {
   mongoose.Promise = global.Promise
-  const db = mongoose.createConnection(config.db.url, options)
+  mongoose.connect(config.db.url)
+
+  const db = mongoose.connection
 
   /* eslint-disable no-console */
   db.on('connected', () => console.log('[  DB connected.  ]'.green))
