@@ -4,5 +4,4 @@
 /node_modules/
 /coverage/
 /lib/
-/public/blog/
 .env
