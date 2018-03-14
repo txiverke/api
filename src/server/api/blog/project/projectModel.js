@@ -18,6 +18,7 @@ const ProjectSchema = new Schema({
   },
   content: String,
   link: String,
+  extra: String,
   background: String,
   creator: {
     type: Schema.Types.ObjectId,

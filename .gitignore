@@ -1,6 +1,9 @@
 .DS_Store
 /*.log
 
+#production
+/public/blog
+
 /node_modules/
 /coverage/
 /lib/
