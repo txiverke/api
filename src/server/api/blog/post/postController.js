@@ -23,7 +23,8 @@ exports.list = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
-    const postObj = Object.assign({}, req.body, { background: req.file.filename })
+    const background = (req.file && req.file !== 'undefined') ? req.file.filename : ''
+    const postObj = Object.assign({}, req.body, { background })
     const newPost = new Post(postObj)
     await newPost.save()
     const posts = await Post.find({})
@@ -67,7 +68,7 @@ exports.update = async (req, res, next) => {
 exports.remove = async (req, res, next) => {
   try {
     const postToRemove = req.post
-    await removeAsset(`posts/${postToRemove.background}`, next)
+    if(req.post.background) await removeAsset(`posts/${postToRemove.background}`, next)
     await postToRemove.remove()
     const posts = await Post.find({})
     return res.status(200).json(posts)

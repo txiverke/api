@@ -1,7 +1,7 @@
 {
   "name": "api",
-  "version": "1.0.1",
-  "description": "API RESTFULL APP",
+  "version": "1.0.2",
+  "description": "API RESTFUL APP",
   "main": "index.js",
   "author": "Xavi Vilà <txiverke@gmail.com>",
   "license": "MIT",
@@ -63,6 +63,7 @@
     "husky": "^0.13.2",
     "jest": "^19.0.2",
     "morgan": "^1.8.2",
+    "node-mocks-http": "^1.5.8",
     "nodemon": "^1.11.0",
     "pm2": "^2.4.2",
     "rimraf": "^2.6.1",

@@ -39,6 +39,7 @@ UserSchema.pre('save', function (next) {
 UserSchema.methods = {
   // eslint-disable-next-line object-shorthand
   authenticate: function (plainTextPword) {
+    const salt = bcrypt.genSaltSync(10)
     return bcrypt.compareSync(plainTextPword, this.password)
   },
   // eslint-disable-next-line object-shorthand
