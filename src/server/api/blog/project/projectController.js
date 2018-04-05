@@ -21,9 +21,11 @@ exports.list = async (req, res, next) => {
   }
 }
 
+
 exports.create = async (req, res, next) => {
   try {
-    const projectObj = Object.assign(req.body, { background: req.file.filename })
+    const background = (req.file && req.file !== 'undefined') ? req.file.filename : ''
+    const projectObj = Object.assign(req.body, { background })
     const newProject = new Project(projectObj)
     await newProject.save()
     const projects = await Project.find({})

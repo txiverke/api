@@ -3,29 +3,30 @@ import app from '../../../../index'
 
 let posts = []
 
-describe('POST API', () => {
-  describe('GET posts', () => {
-    it('should return an Array of Objects', async () => {
+describe('[ POST CRUD ]', () => {
+  describe('READ posts', () => {
+    it('should return a list of posts', async () => {
       const response = await request(app).get('/api/blog/posts')
       expect(response.statusCode).toEqual(200)
       expect(response.body).toBeInstanceOf(Array)
+
+      posts = [...response.body]
     })
 
-    it('should return one Post Object', async () => {
-      const response = await request(app).get('/api/blog/posts/5aa9aa3d8bc34eabc8c7e043')
+    it('should return one post', async () => {
+      const id = posts[posts.length - 1]._id
+      const response = await request(app).get(`/api/blog/posts/${id}`)
       expect(response.statusCode).toEqual(200)
       expect(response.body).toBeInstanceOf(Object)
-      expect(response.body.title).toEqual('tesing is nicesss')
     })
 
     it('should return a 400 if the id does not exist in the DDBB', async () => {
       const response = await request(app).get('/api/blog/posts/3')
-      expect(response.statusCode).toEqual(400)
-      expect(response.body).toEqual({})
+      expect(response.error.status).toEqual(400)
     })
   })
 
-  describe('POST posts', () => {
+  describe('CREATE post', () => {
     const body = {
       title: 'test title',
       file: { 

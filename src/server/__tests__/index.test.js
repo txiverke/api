@@ -8,5 +8,5 @@ describe("App routes", () => {
       expect(response.text).toEqual('This is a private API')
       done()
     })
-  });
-});
+  })
+})
