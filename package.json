@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "API RESTFUL APP",
   "main": "index.js",
   "author": "Xavi Vilà <txiverke@gmail.com>",
@@ -15,7 +15,7 @@
     "prod:start": "cross-env NODE_ENV=production pm 2 start lib && pm2 logs",
     "prod:stop": "pm2 delete lib",
     "eslint": "eslint src && flow",
-    "test": "jest --coverage"
+    "test": "jest --watch --coverage"
   },
   "dependencies": {
     "add": "^2.0.6",
@@ -61,7 +61,7 @@
     "eslint-plugin-react": "^6.9.0",
     "flow-bin": "^0.47.0",
     "husky": "^0.13.2",
-    "jest": "^19.0.2",
+    "jest": "^22.4.3",
     "morgan": "^1.8.2",
     "node-mocks-http": "^1.5.8",
     "nodemon": "^1.11.0",

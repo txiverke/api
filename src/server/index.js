@@ -1,17 +1,17 @@
 // @flow
 
-const express = require('express')
-const path = require('path')
+import express from 'express'
+
+import api from './api'
+import error from './middleware/errorHandler'
+import auth from './auth/routes'
+import root from './root'
+import mongoose from './config/mongoose'
+import middleware from './middleware'
 
 const app = express()
-const api = require('./api')
-const error = require('./middleware/errorHandler')
-const auth = require('./auth/routes')
-const root = require('./root')
-
-require('./config/mongoose')()
-
-require('./middleware')(app)
+mongoose()
+middleware(app)
 
 app.use('/api', api)
 app.use('/auth', auth)
@@ -19,4 +19,4 @@ app.use('/', root)
 
 app.use(error())
 
-module.exports = app
+export default app

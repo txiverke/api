@@ -1,7 +1,8 @@
-const fs = require('fs')
+// @flow
 
-const Post = require('./postModel')
-const newErr = require('../../../util/errorStatus')
+import fs from 'fs'
+import Post from './postModel'
+import newErr from '../../../util/errorStatus'
 
 function removeAsset(path, next) {
   fs.unlink(`./public/blog/img/${path}`, err => {
@@ -10,7 +11,7 @@ function removeAsset(path, next) {
   })
 }
 
-exports.list = async (req, res, next) => {
+export const list = async (req: Object, res: Object, next: Function) => {
   try {
     const posts = await Post.find({})
       .populate('creator')
@@ -21,7 +22,7 @@ exports.list = async (req, res, next) => {
   }
 }
 
-exports.create = async (req, res, next) => {
+export const create = async (req: Object, res: Object, next: Function) => {
   try {
     const background = (req.file && req.file !== 'undefined') ? req.file.filename : ''
     const postObj = Object.assign({}, req.body, { background })
@@ -34,7 +35,7 @@ exports.create = async (req, res, next) => {
   }
 }
 
-exports.postById = async (req, res, next, id) => {
+export const postById = async (req: Object, res: Object, next: Function, id: string) => {
   try {
     const post = await Post.findById(id)
     req.post = post
@@ -44,9 +45,9 @@ exports.postById = async (req, res, next, id) => {
   }
 }
 
-exports.read = (req, res) => res.status(200).json(req.post)
+export const read = (req: Object, res: Object) => res.status(200).json(req.post)
 
-exports.update = async (req, res, next) => {
+export const update = async (req: Object, res: Object, next: Function) => {
   try {
     let background = ''
 
@@ -65,7 +66,7 @@ exports.update = async (req, res, next) => {
   }
 }
 
-exports.remove = async (req, res, next) => {
+export const remove = async (req: Object, res: Object, next: Function) => {
   try {
     const postToRemove = req.post
     if(req.post.background) await removeAsset(`posts/${postToRemove.background}`, next)

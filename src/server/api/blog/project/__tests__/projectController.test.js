@@ -1,3 +1,5 @@
+// @flow
+
 import request from 'supertest-as-promised'
 import app from '../../../../index'
 

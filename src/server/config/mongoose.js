@@ -1,19 +1,20 @@
 // @flow
 
-require('colors')
-const mongoose = require('mongoose')
+import colors from 'colors/safe'
+import mongoose from 'mongoose'
+import config from './index'
 
-const config = require('./index')
-
-module.exports = () => {
+export default () => {
   mongoose.Promise = global.Promise
   mongoose.connect(config.db.url)
 
   const db = mongoose.connection
 
-  /* eslint-disable no-console */
-  db.on('connected', () => console.log('[  DB connected.  ]'.green))
-  db.on('error', err => console.error(err))
-  db.on('disconnected', () => console.log('[  DB disconnected.  ]'.red))
-  /* eslint-enable no-console */
+  if (config.env !== 'test') {
+    /* eslint-disable no-console */
+    db.on('connected', () => console.log(colors.green('[  DB connected.  ]')))
+    db.on('error', err => console.error(colors.red(err)))
+    db.on('disconnected', () => console.log(colors.red('[  DB connected.  ]')))
+    /* eslint-enable no-console */
+  }
 }

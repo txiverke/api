@@ -1,13 +1,15 @@
-const express = require('express')
-const favicon = require('serve-favicon')
-const morgan = require('morgan')
-const compression = require('compression')
-const cors = require('cors')
-const override = require('method-override')
-const bodyParser = require('body-parser')
-const config = require('../config')
+// @flow
 
-module.exports = app => {
+import express from 'express'
+import favicon from 'serve-favicon'
+import morgan from 'morgan'
+import compression from 'compression'
+import cors from 'cors'
+import override from 'method-override'
+import bodyParser from 'body-parser'
+import config from '../config'
+
+export default (app) => {
   if (config.env === 'development') {
     app.use(morgan('dev'))
   } else {

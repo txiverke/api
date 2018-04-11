@@ -1,6 +1,7 @@
-const User = require('./userModel')
-//const signToken = require('../../../auth').signToken
-//const newErr = require('../../../util/errorStatus')
+// @flow
+
+import User from './userModel'
+import { signToken } from '../../../auth'
 
 function newErr (err, state) {
   switch (err.status) {
@@ -10,7 +11,7 @@ function newErr (err, state) {
   }
 }
 
-exports.list = async (req, res) => {
+export const list = async (req: Object, res: Object) => {
   try {
     const users = await User.find({})
     res.status(200).json(users)
@@ -19,19 +20,7 @@ exports.list = async (req, res) => {
   }
 }
 
-exports.create = async (req, res) => {
-  const newUser = new User(req.body)
-
-  try {
-    const user = await newUser.save()
-    const token = await signToken(user._id)
-    res.status(200).json({ token })
-  } catch (err) {
-    return newErr(err, '400')
-  }
-}
-
-exports.userById = async (req, res, next, id) => {
+export const userById = async (req: Object, res: Object, next: Function, id: string) => {
   try {
     const user = await User.findById(id)
     req.user = user
@@ -41,7 +30,7 @@ exports.userById = async (req, res, next, id) => {
   }
 }
 
-exports.update = async (req, res) => {
+export const update = async (req: Object, res: Object) => {
   try {
     const updatedUser = Object.assign(req.user, req.body)
     const user = await updatedUser.save()
@@ -51,17 +40,7 @@ exports.update = async (req, res) => {
   }
 }
 
-exports.delete = (req, res, next) => {
-  req.user.remove((err, removed) => {
-    if (err) {
-      next(err)
-    } else {
-      res.json(removed)
-    }
-  })
-}
-
-exports.read = (req, res) => {
+export const read = (req: Object, res: Object) => {
   const user = {
     _id: req.user._id,
     bio: req.user.bio,

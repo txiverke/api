@@ -1,8 +1,9 @@
 // @flow
 
-const config = require('./server/config')
-const app = require('./server')
+import colors from 'colors/safe'
+import config from './server/config'
+import app from './server'
 
 app.listen(config.port, () => {
-  console.log(`Listening in port: ${String(config.port)} in (${config.env})`)
+  console.log(colors.blue('[  PORT  ]: ') + colors.green(`${String(config.port)} in (${config.env})`))
 })

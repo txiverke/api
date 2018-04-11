@@ -1,24 +1,21 @@
-/**
- * USER ROUTES
- */
+// @flow
 
-const router = require('express').Router()
-const ctrl = require('./userController')
-const auth = require('../../../auth')
+import { Router } from 'express'
+import * as ctrl from './userController'
+import auth from '../../../auth'
 
 const checkUser = [auth.decodeToken(), auth.getFreshUser()]
+const router = Router()
 
 router
   .route('/')
   .get(checkUser, ctrl.list)
-  .post(checkUser, ctrl.create)
 
 router
   .route('/:userId')
   .get(ctrl.read)
   .put(checkUser, ctrl.update)
-  .delete(checkUser, ctrl.delete)
 
 router.param('userId', ctrl.userById)
 
-module.exports = router
+export default router

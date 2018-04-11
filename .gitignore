@@ -3,6 +3,7 @@
 
 #production
 /public/blog
+/flow-typed
 
 /node_modules/
 /coverage/

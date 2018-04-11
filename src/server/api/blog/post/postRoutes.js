@@ -1,13 +1,10 @@
-/**
- * POST ROUTES
- */
+// @flow
 
-const router = require('express').Router()
-const multer = require('multer')
-const crypto = require('crypto')
-
-const ctrl = require('./postController')
-const auth = require('../../../auth')
+import { Router } from 'express'
+import multer from 'multer'
+import crypto from 'crypto'
+import * as ctrl from './postController'
+import auth from '../../../auth'
 
 const checkUser = [auth.decodeToken(), auth.getFreshUser()]
 
@@ -24,6 +21,7 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage })
+const router = Router()
 
 router
   .route('/')
@@ -38,4 +36,4 @@ router
 
 router.param('postId', ctrl.postById)
 
-module.exports = router
+export default router

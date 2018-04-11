@@ -1,9 +1,10 @@
 // @flow
 
-const router = require('express').Router()
+import { Router } from 'express'
+import blog from './blog'
 
-const blog = require('./blog')
+const router = Router()
 
 router.use('/blog', blog)
 
-module.exports = router
+export default router

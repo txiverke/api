@@ -1,32 +1,13 @@
+// @flow
+
 import request from 'supertest-as-promised'
 import app from '../../../../index'
 
 let posts = []
+let id = ''
 
 describe('[ POST CRUD ]', () => {
-  describe('READ posts', () => {
-    it('should return a list of posts', async () => {
-      const response = await request(app).get('/api/blog/posts')
-      expect(response.statusCode).toEqual(200)
-      expect(response.body).toBeInstanceOf(Array)
-
-      posts = [...response.body]
-    })
-
-    it('should return one post', async () => {
-      const id = posts[posts.length - 1]._id
-      const response = await request(app).get(`/api/blog/posts/${id}`)
-      expect(response.statusCode).toEqual(200)
-      expect(response.body).toBeInstanceOf(Object)
-    })
-
-    it('should return a 400 if the id does not exist in the DDBB', async () => {
-      const response = await request(app).get('/api/blog/posts/3')
-      expect(response.error.status).toEqual(400)
-    })
-  })
-
-  describe('CREATE post', () => {
+  describe('[ Create a post ]', () => {
     const body = {
       title: 'test title',
       file: { 
@@ -60,16 +41,40 @@ describe('[ POST CRUD ]', () => {
         .post('/api/blog/posts')
         .send(body)
         .set('access-token', token)
-
-      posts = [...response.body]
+      
+      const newPost = response.body.find(item => item.tags === 'test')
+      id = newPost._id
 
       expect(response.statusCode).toEqual(201)
-      expect(posts).toBeInstanceOf(Array)
-      expect(posts[posts.length - 1].title).toEqual(body.title)
+      expect(response.body).toBeInstanceOf(Array)
+      expect(response.body[response.body.length - 1].title).toEqual(body.title)
+
+      posts = [...response.body]
     })
   })
 
-  describe('UPDATE posts', () => {
+  describe('[ Read posts ]', () => {
+    it('should return a list of posts', async () => {
+      const response = await request(app).get('/api/blog/posts')
+      expect(response.statusCode).toEqual(200)
+      expect(response.body).toBeInstanceOf(Array)
+
+      posts = [...response.body]
+    })
+
+    it('should return one post', async () => {
+      const response = await request(app).get(`/api/blog/posts/${id}`)
+      expect(response.statusCode).toEqual(200)
+      expect(response.body).toBeInstanceOf(Object)
+    })
+
+    it('should return a 400 if the id does not exist in the DDBB', async () => {
+      const response = await request(app).get('/api/blog/posts/3')
+      expect(response.error.status).toEqual(400)
+    })
+  })
+
+  describe('[ Update a posts', () => {
     const body = {
       title: 'update test title',
       file: { 
@@ -95,19 +100,22 @@ describe('[ POST CRUD ]', () => {
       const token = signin.body.token
 
       const response = await request(app)
-        .put(`/api/blog/posts/${posts[posts.length - 1]._id}`)
+        .put(`/api/blog/posts/${id}`)
         .send(body)
         .set('access-token', token)
 
-      posts = [...response.body]
+      const post = response.body.find(item => item._id === id)
 
       expect(response.statusCode).toEqual(200)
-      expect(posts).toBeInstanceOf(Array)
-      expect(posts[posts.length - 1].title).toEqual(body.title)
+      expect(response.body).toBeInstanceOf(Array)
+      expect(post.title).toEqual(body.title)
+
+      posts = [...response.body]
+
     })    
   })
 
-  describe('DELETE posts', () => {
+  describe('Delete a post', () => {
     it('should delete a post', async () => {
       const obj = {
         username: 'txiverke',
@@ -121,8 +129,9 @@ describe('[ POST CRUD ]', () => {
 
       const token = signin.body.token
       const currentPost = posts.length
+
       const response = await request(app)
-        .delete(`/api/blog/posts/${posts[posts.length - 1]._id}`)
+        .delete(`/api/blog/posts/${id}`)
         .set('access-token', token)
 
       posts = [...response.body]

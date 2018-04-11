@@ -1,15 +1,17 @@
 // @flow
 
-const router = require('express').Router()
+import { Router } from 'express'
 
-const users = require('./user/userRoutes')
-const posts = require('./post/postRoutes')
-const statistic = require('./statistic/statisticRoutes')
-const projects = require('./project/projectRoutes')
+import users from './user/userRoutes'
+import posts from './post/postRoutes'
+import statistic from './statistic/statisticRoutes'
+import projects from './project/projectRoutes'
+
+const router = Router()
 
 router.use('/users', users)
 router.use('/posts', posts)
 router.use('/statistic', statistic)
 router.use('/projects', projects)
 
-module.exports = router
+export default router

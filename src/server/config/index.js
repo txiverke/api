@@ -1,5 +1,6 @@
-const dotenv = require('dotenv')
+// @flow
 
+import dotenv from 'dotenv'
 dotenv.config()
 
 const config = {
