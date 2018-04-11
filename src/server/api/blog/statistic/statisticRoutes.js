@@ -1,10 +1,11 @@
-/**
- * STATISTIC ROUTES
- */
-const router = require('express').Router()
+// @flow
 
-const ctrl = require('./statisticController')
+import { Router } from 'express'
+
+import * as ctrl from './statisticController'
+
+const router = Router()
 
 router.route('/').get(ctrl.list)
 
-module.exports = router
+export default router
