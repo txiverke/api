@@ -4,40 +4,25 @@ import request from 'supertest-as-promised'
 import app from '../../../../index'
 
 let projects = []
-let project = {}
+let id = ''
 
 describe('[  PROJECT CRUD  ]', () => {
-  describe('READ projects', () => {
-    it('should return a list of projects', async () => {
-      const response = await request(app).get('/api/blog/projects')
-      expect(response.statusCode).toEqual(200)
-      expect(response.body).toBeInstanceOf(Array)
 
-      projects = [...response.body]
-    })
-
-    it('should return one specific post', async () => {
-      const id = projects[projects.length - 1]._id
-      const response = await request(app).get(`/api/blog/projects/${id}`)
-      expect(response.statusCode).toEqual(200)
-      expect(response.body).toBeInstanceOf(Object)
-    })
-
-    it('should returm Error if the _id does not exist', async () => {
-      const response = await request(app).get('/api/blog/projects/1')
-      expect(response.statusCode).toEqual(500)
-    })
-  })
-
-  describe('CREATE project', () => {
+  describe('[ Create a project ]', () => {
     const body = {
       title: 'Testing create projects.',
       file: { 
         originalname: 'test.png',
         filename: 'test.png' 
       },
-      summary: 'New summary test'
+      summary: 'test'
     }
+
+    it('should return Unauthorized', async () => {
+      const response = await request(app).post('/api/blog/projects').send(body)
+
+      expect(response.statusCode).toEqual(401)
+    })
 
     it('should create a new post', async () => {
       const user = {
@@ -59,11 +44,35 @@ describe('[  PROJECT CRUD  ]', () => {
 
       expect(response.statusCode).toEqual(200)
       expect(response.body).toBeInstanceOf(Array)
-      expect(response.body.length).toEqual(projects.length + 1)
+
+      const newProject = response.body.find(item => item.summary === 'test')
+      id = newProject._id
+      projects = [...response.body]
     })
   })
 
-  describe('UPDATE post', () => {
+  describe('[ Read projects', () => {
+    it('should return a list of projects', async () => {
+      const response = await request(app).get('/api/blog/projects')
+      expect(response.statusCode).toEqual(200)
+      expect(response.body).toBeInstanceOf(Array)
+
+      projects = [...response.body]
+    })
+
+    it('should return one specific post', async () => {
+      const response = await request(app).get(`/api/blog/projects/${id}`)
+      expect(response.statusCode).toEqual(200)
+      expect(response.body).toBeInstanceOf(Object)
+    })
+
+    it('should returm Error if the _id does not exist', async () => {
+      const response = await request(app).get('/api/blog/projects/1')
+      expect(response.statusCode).toEqual(500)
+    })
+  })
+
+  describe('Update a project', () => {
     const body = {
       title: 'Updated title test',
       summary: 'New summary test'
@@ -81,10 +90,9 @@ describe('[  PROJECT CRUD  ]', () => {
         .set('Content-Type', 'application/json')
 
       const token = signin.body.token
-      project = projects.find(item => item.title.includes('Testing create projects.'))
   
       const response = await request(app)
-        .put(`/api/blog/projects/${project._id}`)
+        .put(`/api/blog/projects/${id}`)
         .send(body)
         .set('access-token', token)
 
@@ -92,7 +100,7 @@ describe('[  PROJECT CRUD  ]', () => {
       expect(response.body).toBeInstanceOf(Array)
 
       projects = [...response.body]
-      project = projects.find(item => item._id === project._id)
+      const project = projects.find(item => item._id === id)
       expect(project.title).toEqual(body.title)
     })
   })
@@ -112,7 +120,7 @@ describe('[  PROJECT CRUD  ]', () => {
       const token = signin.body.token
   
       const response = await request(app)
-        .delete(`/api/blog/projects/${project._id}`)
+        .delete(`/api/blog/projects/${id}`)
         .set('access-token', token)
 
       expect(response.statusCode).toEqual(200)

@@ -1,7 +1,8 @@
-const fs = require('fs')
+// @flow
 
-const Project = require('./projectModel')
-const newErr = require('../../../util/errorStatus')
+import fs from 'fs'
+import Project from './projectModel'
+import newErr from '../../../util/errorStatus'
 
 function removeAsset(path, next) {
 // eslint-disable-next-line consistent-return
@@ -12,7 +13,7 @@ function removeAsset(path, next) {
   })
 }
 
-exports.list = async (req, res, next) => {
+export const list = async (req: Object, res: Object, next: Function) => {
   try {
     const projects = await Project.find({})
     return res.status(200).json(projects)
@@ -22,7 +23,7 @@ exports.list = async (req, res, next) => {
 }
 
 
-exports.create = async (req, res, next) => {
+export const create = async (req: Object, res: Object, next: Function) => {
   try {
     const background = (req.file && req.file !== 'undefined') ? req.file.filename : ''
     const projectObj = Object.assign(req.body, { background })
@@ -35,7 +36,7 @@ exports.create = async (req, res, next) => {
   }
 }
 
-exports.projectById = async (req, res, next, id) => {
+export const projectById = async (req: Object, res: Object, next: Function, id: string) => {
   try {
     const project = await Project.findById(id)
     req.project = project
@@ -45,9 +46,9 @@ exports.projectById = async (req, res, next, id) => {
   }
 }
 
-exports.read = (req, res) => res.status(200).json(req.project)
+export const read = (req: Object, res: Object) => res.status(200).json(req.project)
 
-exports.update = async (req, res, next) => {
+export const update = async (req: Object, res: Object, next: Function) => {
   try {
     let background = ''
 
@@ -68,7 +69,7 @@ exports.update = async (req, res, next) => {
   }
 }
 
-exports.remove = async (req, res, next) => {
+export const remove = async (req: Object, res: Object, next: Function) => {
   try {
     const projectToRemove = req.project
     if (projectToRemove.background) {

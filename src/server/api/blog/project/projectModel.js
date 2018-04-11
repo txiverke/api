@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+// @flow
 
-const Schema = mongoose.Schema
+import mongoose, { Schema } from 'mongoose'
 
 const ProjectSchema = new Schema({
   created: {

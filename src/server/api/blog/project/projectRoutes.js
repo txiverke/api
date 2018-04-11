@@ -1,11 +1,11 @@
 // @flow
 
-const router = require('express').Router()
-const multer = require('multer')
-const crypto = require('crypto')
+import { Router } from 'express'
+import multer from 'multer'
+import crypto from 'crypto'
 
-const ctrl = require('./projectController')
-const auth = require('../../../auth')
+import * as ctrl from './projectController'
+import auth from '../../../auth'
 
 const checkUser = [auth.decodeToken(), auth.getFreshUser()]
 
@@ -22,6 +22,7 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage })
+const router = Router()
 
 router
   .route('/')
@@ -36,4 +37,4 @@ router
 
 router.param('projectId', ctrl.projectById)
 
-module.exports = router
+export default router
