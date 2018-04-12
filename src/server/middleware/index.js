@@ -9,7 +9,7 @@ import override from 'method-override'
 import bodyParser from 'body-parser'
 import config from '../config'
 
-export default (app) => {
+export default (app: Object) => {
   if (config.env === 'development') {
     app.use(morgan('dev'))
   } else {

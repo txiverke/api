@@ -1,32 +1,24 @@
 // @flow
 
 import User from './userModel'
-import { signToken } from '../../../auth'
-
-function newErr (err, state) {
-  switch (err.status) {
-    case '400': return res.status(err.status).json({ error: err })
-    case '500': return res.status(err.status).json({ error: err })
-    default: return res.status(500).json({ error: err })
-  }
-}
+import errorHandler from '../../../middleware/errorHandler'
 
 export const list = async (req: Object, res: Object) => {
   try {
     const users = await User.find({})
-    res.status(200).json(users)
+    return res.status(200).json(users)
   } catch (err) {
-    return newErr(err, '400')
+    errorHandler(err, res)
   }
 }
 
 export const userById = async (req: Object, res: Object, next: Function, id: string) => {
   try {
-    const user = await User.findById(id)
-    req.user = user
+    req.user = await User.findById(id)
     next()
   } catch (err) {
-    return newErr(err, '400')
+    console.log(err)
+    errorHandler(err, res)
   }
 }
 
@@ -36,7 +28,7 @@ export const update = async (req: Object, res: Object) => {
     const user = await updatedUser.save()
     res.status(201).json(user)
   } catch (err) {
-    return newErr(err, '400')
+    errorHandler(err, res)
   }
 }
 

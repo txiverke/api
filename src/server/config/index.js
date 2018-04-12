@@ -25,7 +25,7 @@ try {
     // eslint-disable-next-line
     envConfig = require('./testing.js')
   } else {
-    // eslint-disable-next-line
+    // $FlowFixMe: suppressing this error until we can refactor
     envConfig = require(`./${config.env}.js`)
   }
 } catch (e) {

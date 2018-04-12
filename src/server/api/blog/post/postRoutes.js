@@ -4,8 +4,9 @@ import { Router } from 'express'
 import multer from 'multer'
 import crypto from 'crypto'
 import * as ctrl from './postController'
-import auth from '../../../auth'
+import * as auth from '../../../auth'
 
+// $FlowFixMe: suppressing this error until we can refactor
 const checkUser = [auth.decodeToken(), auth.getFreshUser()]
 
 const storage = multer.diskStorage({

@@ -1,7 +1,11 @@
-const router = require('express').Router()
-const verifyUser = require('./index').verifyUser
-const controller = require('./controller')
+// @flow
 
-router.post('/signin', verifyUser(), controller.signin)
+import { Router } from 'express'
+import { verifyUser } from './index'
+import signin from './controller'
 
-module.exports = router
+const router = Router()
+
+router.post('/signin', verifyUser(), signin)
+
+export default router

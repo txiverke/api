@@ -1,6 +1,8 @@
-const signToken = require('./index').signToken
+// @flow
 
-exports.signin = (req, res) => {
+import { signToken } from './index'
+
+export default (req: Object, res: Object) => {
   const token = signToken(req.user._id)
   return res.json({ token })
 }

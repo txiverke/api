@@ -70,7 +70,7 @@ describe('[ POST CRUD ]', () => {
 
     it('should return a 400 if the id does not exist in the DDBB', async () => {
       const response = await request(app).get('/api/blog/posts/3')
-      expect(response.error.status).toEqual(400)
+      expect(response.error.status).toEqual(404)
     })
   })
 

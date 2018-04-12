@@ -3,7 +3,7 @@
 import User from '../user/userModel'
 import Post from '../post/postModel'
 import Project from '../project/projectModel'
-import newErr from '../../../util/errorStatus'
+import errorHandler from '../../../middleware/errorHandler'
 
 export const list = async (req: Object, res: Object, next: Function) => {
   try {
@@ -14,6 +14,6 @@ export const list = async (req: Object, res: Object, next: Function) => {
 
     res.status(200).json(response)
   } catch (err) {
-    next(newErr(err, '400'))
+    return errorHandler(err, res)
   }
 }

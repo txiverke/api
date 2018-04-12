@@ -68,7 +68,7 @@ describe('[  PROJECT CRUD  ]', () => {
 
     it('should returm Error if the _id does not exist', async () => {
       const response = await request(app).get('/api/blog/projects/1')
-      expect(response.statusCode).toEqual(500)
+      expect(response.statusCode).toEqual(404)
     })
   })
 
