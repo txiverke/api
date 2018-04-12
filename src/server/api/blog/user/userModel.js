@@ -1,7 +1,8 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
+// @flow
 
-const Schema = mongoose.Schema
+import mongoose, { Schema } from 'mongoose'
+import bcrypt from 'bcrypt'
+
 const UserSchema = new Schema({
   firstname: {
     type: String,
