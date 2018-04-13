@@ -7,7 +7,7 @@ let posts = []
 let id = ''
 
 describe('[ POST CRUD ]', () => {
-  describe('[ Create a post ]', () => {
+  describe('Create', () => {
     const body = {
       title: 'test title',
       file: { 
@@ -22,6 +22,29 @@ describe('[ POST CRUD ]', () => {
     it('should return Unauthorized', async () => {
       const response = await request(app).post('/api/blog/posts').send(body)
       expect(response.statusCode).toEqual(401)
+    })
+
+    it('should return 500 if the right data is not send', async () => {
+      const obj = {
+        username: 'txiverke',
+        password: 'testing'
+      }
+
+      const emptyBody = {}
+
+      const signin = await request(app)
+        .post('/auth/signin')
+        .send(obj)
+        .set('Content-Type', 'application/json')
+
+      const token = signin.body.token
+
+      const response = await request(app)
+        .post('/api/blog/posts')
+        .send(emptyBody)
+        .set('access-token', token)
+
+      expect(response.statusCode).toEqual(500)
     })
 
     it('should create a post', async () => {
@@ -53,7 +76,7 @@ describe('[ POST CRUD ]', () => {
     })
   })
 
-  describe('[ Read posts ]', () => {
+  describe('Read', () => {
     it('should return a list of posts', async () => {
       const response = await request(app).get('/api/blog/posts')
       expect(response.statusCode).toEqual(200)
@@ -74,7 +97,7 @@ describe('[ POST CRUD ]', () => {
     })
   })
 
-  describe('[ Update a posts', () => {
+  describe('Update', () => {
     const body = {
       title: 'update test title',
       file: { 
@@ -115,7 +138,7 @@ describe('[ POST CRUD ]', () => {
     })    
   })
 
-  describe('Delete a post', () => {
+  describe('Delete', () => {
     it('should delete a post', async () => {
       const obj = {
         username: 'txiverke',
