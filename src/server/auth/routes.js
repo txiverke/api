@@ -7,5 +7,6 @@ import signin from './controller'
 const router = Router()
 
 router.post('/signin', verifyUser(), signin)
+router.post('/signin-leo', verifyUser('leo'), signin)
 
 export default router

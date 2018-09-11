@@ -4,9 +4,17 @@ import jwt from 'jsonwebtoken'
 import expressJwt from 'express-jwt'
 import config from '../config'
 import User from '../api/blog/user/userModel'
+import leo_User from '../api/leo/user/userModel'
 import errorHandler from '../middleware/errorHandler'
 
 const checkToken = expressJwt({ secret: config.secrets.jwt })
+
+const getModel = (type: string = '') => {
+  switch (type) {
+    case 'leo': return leo_User
+    default: return User
+  }
+}
 
 export const decodeToken = () => (req: Object, res: Object, next: Function) => {
   if (req.headers && req.headers['access-token']) {
@@ -16,11 +24,13 @@ export const decodeToken = () => (req: Object, res: Object, next: Function) => {
   checkToken(req, res, next)
 }
 
-export const getFreshUser = () => (req: Object, res: Object, next: Function) => {
-  User.findById(req.user._id)
+export const getFreshUser = (type: string = '') => (req: Object, res: Object, next: Function) => {
+  const currentUser = getModel(type)
+
+  currentUser.findById(req.user._id)
     .then(user => {
       if (!user) {
-        return errorHandler({ name: 'UnauthorizedError' }, res)
+        return res.status(401).json({ success: false, data: 'Unauthorized User' })
       } else {
         req.user = user
         next()
@@ -31,23 +41,25 @@ export const getFreshUser = () => (req: Object, res: Object, next: Function) => 
 }
 
 
-export const verifyUser = () => (req: Object, res: Object, next: Function) => {
+export const verifyUser = (type: string = '') => (req: Object, res: Object, next: Function) => {
+  
+  const currentUser = getModel(type)
   const username = req.body.username
   const password = req.body.password
 
   // if no username or password then send
   if (!username || !password) {
-    return res.status(400).send('You need a username and password')
+    return res.status(400).json({ success: false, data: 'You need a username and password' })
   }
 
-  User.findOne({ username })
+  currentUser.findOne({ username })
     .then(user => {
       if (!user) {
-        return res.status(401).send('No user with the given username')
+        return res.status(401).json({ success: false, data: 'No user with the given username' })
       }
 
       if (!user.authenticate(password)) {
-        return res.status(401).send('Wrong password')
+        return res.status(401).json({ success: false, data: 'Wrong password' })
       }
 
       req.user = user
