@@ -1,5 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 
+const currentYear = (new Date()).getFullYear() + 1
+
 const SchoolSchema = Schema({
   name: {
     type: String,
@@ -24,6 +26,14 @@ const SchoolSchema = Schema({
   email: {
     type: String,
     required: true,
+  },
+  category: {
+    type: Array,
+    required: true,
+  },
+  year: {
+    type: Number,
+    default: currentYear
   }
 })
 
