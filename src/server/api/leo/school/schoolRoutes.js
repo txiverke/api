@@ -13,6 +13,7 @@ router
 router
   .route('/:schoolId')
   .put(checkUser, ctrl.update)
+  .delete(checkUser, ctrl.remove)
 
 router.param('schoolId', ctrl.schoolById)
 

@@ -31,6 +31,18 @@ export const update = async (req, res) => {
   }
 }
 
+export const remove = async (req, res) => {
+  try {
+    console.log('remove', req.school)
+    const schoolToRemove = req.school 
+    await schoolToRemove.remove()
+    const schools = await School.find({})
+    return res.status(200).json({ success: true, data: schools })
+  } catch (err) {
+    return res.status(500).json({ success: false, data: err })
+  }
+}
+
 export const schoolById = async (req, res, next, id) => {
   try {
     req.school = await School.findById(id)

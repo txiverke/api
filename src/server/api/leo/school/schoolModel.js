@@ -28,8 +28,7 @@ const SchoolSchema = Schema({
     required: true,
   },
   category: {
-    type: Array,
-    required: true,
+    type: Array
   },
   year: {
     type: Number,
