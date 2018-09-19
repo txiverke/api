@@ -3,7 +3,6 @@ import config from '../../../config'
 import nodemailer from 'nodemailer'
 import smtpTransport from 'nodemailer-smtp-transport'
 
-
 export const list = async (req, res) => {
   try {
     const schools = await School.find({})
@@ -17,7 +16,7 @@ export const create = async (req, res) => {
   try {
     const newSchool = await new School(req.body)
     await newSchool.save()
-    await sendMail(newSchool)
+    await setMail(newSchool)
     const schools = await School.find({})
     return res.status(201).json({ success: true, data: schools })
   } catch (err) {
@@ -56,18 +55,20 @@ export const schoolById = async (req, res, next, id) => {
   }
 }
 
-const sendMail = school => {
+const setMail = school => {
 
   let transporter = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // true for 465, false for other ports
+    port: 465,
+    secure: true, // true for 465, false for other ports
     auth: {
       user: config.mail.user,
       pass: config.mail.pass
     }
-   }))
+  }))
+
+  console.log(transporter)
 
   let mailOptions = {
       from: '"Leo, leo... ¿Qué lees?" <leoeloconcurso@gmail.com>', // sender address
@@ -85,6 +86,8 @@ const sendMail = school => {
         <p>&copy; Leo, leo... ¿Qué lees?</p>
       `
   }
+
+  console.log(mailOptions)
 
   transporter.sendMail(mailOptions, (err, info) => {
     if(err)
