@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "API RESTFUL APP",
   "main": "index.js",
   "author": "Xavi Vilà <txiverke@gmail.com>",
@@ -43,6 +43,7 @@
     "multer": "^1.3.0",
     "nodemailer": "^4.6.8",
     "nodemailer-smtp-transport": "^2.7.4",
+    "pm2": "^3.1.2",
     "serve-favicon": "^2.4.3"
   },
   "devDependencies": {
@@ -65,7 +66,6 @@
     "morgan": "^1.8.2",
     "node-mocks-http": "^1.5.8",
     "nodemon": "^1.11.0",
-    "pm2": "^2.4.2",
     "rimraf": "^2.6.1",
     "supertest": "^3.0.0",
     "supertest-as-promised": "^4.0.2"
