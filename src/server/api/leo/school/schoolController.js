@@ -68,8 +68,6 @@ const setMail = school => {
     }
   }))
 
-  console.log(transporter)
-
   let mailOptions = {
       from: '"Leo, leo... ¿Qué lees?" <leoeloconcurso@gmail.com>', // sender address
       to: 'txiverke@gmail.com', // list of receivers
@@ -87,12 +85,10 @@ const setMail = school => {
       `
   }
 
-  console.log(mailOptions)
-
   transporter.sendMail(mailOptions, (err, info) => {
     if(err)
-      console.log(err)
+      console.log('err ->', err)
     else
-      console.log(info);
+      console.log('sendMail ->', info);
  });
 }
