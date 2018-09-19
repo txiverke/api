@@ -70,7 +70,8 @@ const setMail = school => {
   });
     
   const accessToken = oauth2Client.refreshAccessToken()
-    .then(res => res.credentials.access_token);
+    .then(res => res.credentials.access_token)
+    .catch(err => console.log('accessTokenError: ',err))
 
   const smtpTransport = nodemailer.createTransport({
     service: "gmail",
