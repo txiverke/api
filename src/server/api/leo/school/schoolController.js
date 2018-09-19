@@ -1,7 +1,9 @@
 import School from './schoolModel'
 import config from '../../../config'
 import nodemailer from 'nodemailer'
-import smtpTransport from 'nodemailer-smtp-transport'
+import { google } from 'googleapis'
+
+const OAuth2 = google.auth.OAuth2
 
 export const list = async (req, res) => {
   try {
@@ -57,23 +59,37 @@ export const schoolById = async (req, res, next, id) => {
 
 const setMail = school => {
 
-  let transporter = nodemailer.createTransport(smtpTransport({
-    service: 'gmail',
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // true for 465, false for other ports
-    auth: {
-      user: config.mail.user,
-      pass: config.mail.pass
-    }
-  }))
+  const oauth2Client = new OAuth2(
+    "1067546246706-mf3u14dfbl9lhrpqpl61nrq41lkrlico.apps.googleusercontent.com", // ClientID
+    "3Stb9mRd1vtrI0CcVarPAfGq", // Client Secret
+    "https://developers.google.com/oauthplayground" // Redirect URL
+  )
 
-  let mailOptions = {
-      from: '"Leo, leo... ¿Qué lees?" <leoeloconcurso@gmail.com>', // sender address
-      to: 'txiverke@gmail.com', // list of receivers
-      subject: 'Nueva escuela registrada!!', // Subject line
-      text: 'Nueva escuela registrada', // plain text body
-      html: `
+  oauth2Client.setCredentials({
+    refresh_token: "1/6rUgSY_YdEQXXLeuRawG_U-H1gwOdGZMpxIgfUh2djA"
+  });
+    
+  const accessToken = oauth2Client.refreshAccessToken()
+    .then(res => res.credentials.access_token);
+
+  const smtpTransport = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+          type: "OAuth2",
+          user: "leoleoconcurso@gmail.com", 
+          clientId: "1067546246706-mf3u14dfbl9lhrpqpl61nrq41lkrlico.apps.googleusercontent.com",
+          clientSecret: "3Stb9mRd1vtrI0CcVarPAfGq",
+          refreshToken: "1/6rUgSY_YdEQXXLeuRawG_U-H1gwOdGZMpxIgfUh2djA",
+          accessToken: accessToken
+    }
+  });
+  
+  const mailOptions = {
+    from: 'leoleoconcurso@gmail.com', // sender address
+    to: `txiverke@gmail.com, ${school.email}`, // list of receivers
+    subject: 'Nueva escuela registrada!!', // Subject line
+    generateTextFromHTML: true,
+    html: `
         <h1>${school.name} se ha registrado en el concurso leo, leo... ¿qué lees?</h1>
         <br />
         <h2><small>Persona de contacto: </small>${school.name}</h2>
@@ -83,12 +99,11 @@ const setMail = school => {
         <br /><br />  
         <p>&copy; Leo, leo... ¿Qué lees?</p>
       `
-  }
+  };
 
-  transporter.sendMail(mailOptions, (err, info) => {
-    if(err)
-      console.log('err ->', err)
-    else
-      console.log('sendMail ->', info);
- });
+  smtpTransport.sendMail(mailOptions, (error, response) => {
+    error ? console.log(error) : console.log(response);
+    smtpTransport.close();
+  });
+
 }
