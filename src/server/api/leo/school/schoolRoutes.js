@@ -7,7 +7,7 @@ const router = Router()
 
 router
   .route('/')
-  .get(checkUser, ctrl.list)
+  .get(ctrl.list)
   .post(ctrl.create)
 
 router
