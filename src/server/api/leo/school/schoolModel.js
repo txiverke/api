@@ -7,10 +7,6 @@ const SchoolSchema = Schema({
     type: String,
     required: true,
   },
-  course: {
-    type: String,
-    required: true,
-  },
   phone: {
     type: String,
     required: true,

@@ -5,8 +5,10 @@ import favicon from 'serve-favicon'
 import morgan from 'morgan'
 import compression from 'compression'
 import cors from 'cors'
+import path from 'path'
 import override from 'method-override'
 import bodyParser from 'body-parser'
+
 import config from '../config'
 
 export default (app: Object) => {
@@ -22,6 +24,6 @@ export default (app: Object) => {
   app.use(bodyParser.json({ limit: '10mb' }))
   app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 
-  app.use(express.static('./public'))
+  app.use(express.static(path.join(__dirname, 'public'), { maxAge: '30 days' }))
   app.use(favicon('./public/favicon.ico'))
 }
