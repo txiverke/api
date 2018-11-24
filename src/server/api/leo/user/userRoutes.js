@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import * as ctrl from './userControler'
+import * as ctrl from './userController'
 import * as auth from '../../../auth'
 
 const checkUser = [auth.decodeToken(), auth.getFreshUser('leo')]
