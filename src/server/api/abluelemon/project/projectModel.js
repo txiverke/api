@@ -24,6 +24,9 @@ const ProjectSchema = new Schema({
   documents: {
     type: Array,
   },
+  video: {
+    type: Array,
+  },
   created: {
     type: Date,
     default: Date.now,
