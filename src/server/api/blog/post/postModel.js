@@ -18,6 +18,9 @@ const PostSchema = new Schema({
   background: {
     type: String,
   },
+  background_id: {
+    type: String,
+  },
   link: {
     type: String,
     required: true,

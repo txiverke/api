@@ -1,14 +1,11 @@
 // @flow
 
-import fs from 'fs'
 import Post from './postModel'
 import errorHandler from '../../../middleware/errorHandler'
+import cloudinary from 'cloudinary'
 
-function removeAsset(path, res) {
-  fs.unlink(`./public/blog/img/${path}`, err => {
-    if (err) return errorHandler(err, res)
-    return false
-  })
+function removeAsset(id, res) {
+  cloudinary.v2.uploader.destroy(id, (err, result) => errorHandler(err, res))
 }
 
 export const list = async (req: Object, res: Object) => {
@@ -24,8 +21,14 @@ export const list = async (req: Object, res: Object) => {
 
 export const create = async (req: Object, res: Object) => {
   try {
-    const background = (req.file && req.file !== 'undefined') ? req.file.filename : ''
-    const postObj = Object.assign({}, req.body, { background })
+    let background, background_id
+
+    if (req.file && req.file !== 'undefined') {
+      background = req.file.secure_url
+      background_id = req.file.public_id
+    }
+
+    const postObj = Object.assign({}, req.body, { background, background_id })
     const newPost = new Post(postObj)
     await newPost.save()
     const posts = await Post.find({})
@@ -49,15 +52,17 @@ export const read = (req: Object, res: Object) => res.status(200).json(req.post)
 
 export const update = async (req: Object, res: Object) => {
   try {
-    let background = ''
+    let background, background_id
 
     if (req.file && req.file !== 'undefined') {
-      await removeAsset(`posts/${req.post.background}`, res)
-      background = req.file.filename
+      await removeAsset(req.post.background_id, res)
+      background = req.file.secure_url
+      background_id = req.file.public_id
     } else {
       background = req.post.background
+      background_id = req.post.background_id
     }
-    const postToUpdate = Object.assign(req.post, req.body, { background })
+    const postToUpdate = Object.assign(req.post, req.body, { background, background_id })
     await postToUpdate.save()
     const posts = await Post.find({})
     return res.status(200).json(posts)
@@ -69,7 +74,9 @@ export const update = async (req: Object, res: Object) => {
 export const remove = async (req: Object, res: Object) => {
   try {
     const postToRemove = req.post
-    if(req.post.background) await removeAsset(`posts/${postToRemove.background}`, res)
+
+    if (req.post.background) await removeAsset(req.post.background_id, res)
+
     await postToRemove.remove()
     const posts = await Post.find({})
     return res.status(200).json(posts)

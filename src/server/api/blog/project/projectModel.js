@@ -19,7 +19,12 @@ const ProjectSchema = new Schema({
   content: String,
   link: String,
   extra: String,
-  background: String,
+  background: {
+    type: String,
+  },
+  background_id: {
+    type: String,
+  },
   creator: {
     type: Schema.Types.ObjectId,
     ref: 'User',

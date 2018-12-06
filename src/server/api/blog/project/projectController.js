@@ -1,16 +1,11 @@
 // @flow
 
-import fs from 'fs'
 import Project from './projectModel'
 import errorHandler from '../../../middleware/errorHandler'
+import cloudinary from 'cloudinary'
 
-function removeAsset(path, res) {
-// eslint-disable-next-line consistent-return
-  fs.unlink(`./public/blog/img/${path}`, err => {
-    if (err) {
-      return errorHandler(err, res)
-    }
-  })
+function removeAsset(id, res) {
+  cloudinary.v2.uploader.destroy(id, (err, result) => errorHandler(err, res))
 }
 
 export const list = async (req: Object, res: Object, next: Function) => {
@@ -22,11 +17,16 @@ export const list = async (req: Object, res: Object, next: Function) => {
   }
 }
 
-
 export const create = async (req: Object, res: Object, next: Function) => {
   try {
-    const background = (req.file && req.file !== 'undefined') ? req.file.filename : ''
-    const projectObj = Object.assign(req.body, { background })
+    let background, background_id
+
+    if (req.file && req.file !== 'undefined') {
+      background = req.file.secure_url
+      background_id = req.file.public_id
+    }
+
+    const projectObj = Object.assign(req.body, { background, background_id })
     const newProject = new Project(projectObj)
     await newProject.save()
     const projects = await Project.find({})
@@ -50,16 +50,18 @@ export const read = (req: Object, res: Object) => res.status(200).json(req.proje
 
 export const update = async (req: Object, res: Object) => {
   try {
-    let background = ''
+    let background, background_id
 
     if (req.file && req.file !== 'undefined') {
-      await removeAsset(`projects/${req.project.background}`, res)
-      background = req.file.filename
+      await removeAsset(req.project.background_id, res)
+      background = req.file.secure_url
+      background_id = req.file.public_id
     } else {
       background = req.project.background
+      background_id = req.project.background_id
     }
 
-    const projectToUpdate = Object.assign(req.project, req.body, { background })
+    const projectToUpdate = Object.assign(req.project, req.body, { background, background_id })
     await projectToUpdate.save()
 
     const projects = await Project.find({})
@@ -72,9 +74,9 @@ export const update = async (req: Object, res: Object) => {
 export const remove = async (req: Object, res: Object) => {
   try {
     const projectToRemove = req.project
-    if (projectToRemove.background) {
-      await removeAsset(`projects/${projectToRemove.background}`, res)
-    }
+
+    if (req.project.background) await removeAsset(req.project.background_id, res)
+
     await projectToRemove.remove()
     const projects = await Project.find({})
     res.status(200).json(projects)

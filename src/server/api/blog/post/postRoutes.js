@@ -2,23 +2,25 @@
 
 import { Router } from 'express'
 import multer from 'multer'
-import crypto from 'crypto'
+import cloudinary from 'cloudinary'
+import cloudinaryStorage from 'multer-storage-cloudinary'
 import * as ctrl from './postController'
 import * as auth from '../../../auth'
 
 // $FlowFixMe: suppressing this error until we can refactor
 const checkUser = [auth.decodeToken(), auth.getFreshUser()]
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, './public/blog/img/posts/')
-  },
-  filename: (req, file, cb) => {
-    crypto.pseudoRandomBytes(16, (err, raw) => {
-      const mimetype = file.originalname.substr(file.originalname.lastIndexOf('.') + 1)
-      cb(null, `${raw.toString('hex')}${Date.now()}.${mimetype}`)
-    })
-  },
+cloudinary.config({
+  cloud_name: process.env.BLOG_CLOUD_NAME,
+  api_key: process.env.BLOG_API_KEY,
+  api_secret: process.env.BLOG_API_SECRET,
+})
+
+const storage = cloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: 'xaviervila.tech',
+  allowedFormats: ['jpg', 'png'],
+  transformation: [{ width: 800, height: 800, crop: 'limit' }],
 })
 
 const upload = multer({ storage })
