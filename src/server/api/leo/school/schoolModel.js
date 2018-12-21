@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 
-const currentYear = (new Date()).getFullYear() + 1
+const currentYear = new Date().getFullYear() + 1
 
 const SchoolSchema = Schema({
   name: {
@@ -14,7 +14,7 @@ const SchoolSchema = Schema({
   address: {
     type: String,
     required: true,
-  }, 
+  },
   contact: {
     type: String,
     required: true,
@@ -24,12 +24,20 @@ const SchoolSchema = Schema({
     required: true,
   },
   category: {
-    type: Array
+    type: Array,
   },
   year: {
     type: Number,
-    default: currentYear
-  }
+    default: currentYear,
+  },
+  zip_code: {
+    type: Number,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
 })
 
 module.exports = mongoose.model('leo_School', SchoolSchema)
