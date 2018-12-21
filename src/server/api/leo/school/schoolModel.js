@@ -26,17 +26,17 @@ const SchoolSchema = Schema({
   category: {
     type: Array,
   },
-  year: {
-    type: Number,
-    default: currentYear,
-  },
-  zip_code: {
+  cp: {
     type: String,
     required: true,
   },
   city: {
     type: String,
     required: true,
+  },
+  year: {
+    type: Number,
+    default: currentYear,
   },
 })
 

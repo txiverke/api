@@ -1,9 +1,6 @@
 import School from './schoolModel'
-import config from '../../../config'
 import nodemailer from 'nodemailer'
-import { google } from 'googleapis'
 
-const OAuth2 = google.auth.OAuth2
 
 export const list = async (req, res) => {
   try {
@@ -16,7 +13,6 @@ export const list = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
-    console.log(req.body)
     const newSchool = await new School(req.body)
     await newSchool.save()
     const schools = await School.find({})
