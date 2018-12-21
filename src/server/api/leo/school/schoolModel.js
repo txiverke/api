@@ -31,7 +31,7 @@ const SchoolSchema = Schema({
     default: currentYear,
   },
   zip_code: {
-    type: Number,
+    type: String,
     required: true,
   },
   city: {

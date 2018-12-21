@@ -16,9 +16,9 @@ export const list = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
+    console.log(req.body)
     const newSchool = await new School(req.body)
     await newSchool.save()
-    //await setMail(newSchool)
     const schools = await School.find({})
     return res.status(201).json({ success: true, data: schools })
   } catch (err) {
