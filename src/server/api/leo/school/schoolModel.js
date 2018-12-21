@@ -28,11 +28,9 @@ const SchoolSchema = Schema({
   },
   cp: {
     type: String,
-    required: true,
   },
   city: {
     type: String,
-    required: true,
   },
   year: {
     type: Number,

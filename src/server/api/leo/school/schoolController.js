@@ -13,6 +13,7 @@ export const list = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
+    console.log('req.body', req.body)
     const newSchool = await new School(req.body)
     await newSchool.save()
     const schools = await School.find({})
