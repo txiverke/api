@@ -36,7 +36,7 @@
     "express-session": "^1.15.3",
     "fs": "^0.0.1-security",
     "googleapis": "^33.0.0",
-    "jsonwebtoken": "^8.1.0",
+    "jsonwebtoken": "^9.0.0",
     "logger": "^0.0.1",
     "method-override": "^2.3.10",
     "mime": "^2.2.0",
